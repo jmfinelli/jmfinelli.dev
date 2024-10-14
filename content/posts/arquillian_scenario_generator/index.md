@@ -20,70 +20,76 @@ First of all, the code to create the Arquillian extension will be introduced and
 
 #### LRACoordinatorScenarioGenerator
 ```java
-public class LRACoordinatorScenarioGenerator extends ScenarioGeneratorBase implements DeploymentScenarioGenerator {
+public class LRACoordinatorScenarioGenerator extends ScenarioGeneratorBase
+        implements DeploymentScenarioGenerator {
 
-	public static final String EXTENSION_NAME = "LRACoordinatorDeployment";
-	public static final String EXTENSION_DEPLOYMENT_NAME = "deploymentName"; // needed
-	public static final String EXTENSION_GROUP_NAME = "groupName"; // needed
-	public static final String EXTENSION_CONTAINER_NAME = "containerName"; // needed
-	public static final String EXTENSION_TESTABLE = "testable";
+    public static final String EXTENSION_NAME = "LRACoordinatorDeployment";
+    public static final String EXTENSION_DEPLOYMENT_NAME = "deploymentName";
+    public static final String EXTENSION_GROUP_NAME = "groupName";
+    public static final String EXTENSION_CONTAINER_NAME = "containerName";
+    public static final String EXTENSION_TESTABLE = "testable";
 
-	@Override
-	public List<DeploymentDescription> generate(TestClass testClass) {
+    @Override
+    public List<DeploymentDescription> generate(TestClass testClass) {
 
-    	List<DeploymentDescription> descriptions = new ArrayList<>();
+        List<DeploymentDescription> descriptions = new ArrayList<>();
 
-    	// Fetch all properties in the section EXTENSION_NAME
-    	Map<String, String> extensionProperties = getExtensionProperties(EXTENSION_NAME);
+        // Fetch all properties in the section EXTENSION_NAME
+        Map<String, String> extensionProperties = getExtensionProperties(EXTENSION_NAME);
 
-    	// If the section of this extension is not in the arquillian.xml file, it means that this extension
-    	// does not need to start. As a consequence, an empty list of DeploymentDescription is returned
-    	if (extensionProperties == null) {
-        	return new ArrayList<>();
-    	}
+        /*
+         * If the section of this extension is not in the arquillian.xml file,
+         * it means that this extension does not need to start.
+         * As a consequence, an empty list of DeploymentDescription is returned
+         */
+        if (extensionProperties == null) {
+            return new ArrayList<>();
+        }
 
-    	// Checks that all required properties are defined
-    	checkPropertiesExistence(
-            	extensionProperties,
-            	EXTENSION_DEPLOYMENT_NAME,
-            	EXTENSION_GROUP_NAME,
-            	EXTENSION_CONTAINER_NAME,
-            	EXTENSION_TESTABLE);
+        // Checks that all required properties are defined
+        checkPropertiesExistence(
+                extensionProperties,
+                EXTENSION_DEPLOYMENT_NAME,
+                EXTENSION_GROUP_NAME,
+                EXTENSION_CONTAINER_NAME,
+                EXTENSION_TESTABLE);
 
-    	GroupDef group = getGroupWithName(extensionProperties.getOrDefault(EXTENSION_GROUP_NAME, ""));
+        GroupDef group = getGroupWithName(extensionProperties.getOrDefault(EXTENSION_GROUP_NAME, ""));
 
-    	ContainerDef container;
-    	if (group != null) {
-        	container = getContainerWithName(group, extensionProperties.get(EXTENSION_CONTAINER_NAME));
-    	} else {
-        	container = getContainerWithName(extensionProperties.get(EXTENSION_CONTAINER_NAME));
-    	}
+        ContainerDef container;
+        if (group != null) {
+            container = getContainerWithName(group, extensionProperties.get(EXTENSION_CONTAINER_NAME));
+        } else {
+            container = getContainerWithName(extensionProperties.get(EXTENSION_CONTAINER_NAME));
+        }
 
-    	if (container == null) {
-        	String message = String.format(
-                	"%s: no container was found with name: %s.",
-                	EXTENSION_NAME,
-                	extensionProperties.get(EXTENSION_CONTAINER_NAME));
+        if (container == null) {
+            String message = String.format(
+                    "%s: no container was found with name: %s.",
+                    EXTENSION_NAME,
+                    extensionProperties.get(EXTENSION_CONTAINER_NAME));
 
-        	log.error(message);
-        	throw new RuntimeException(message);
-    	}
+            log.error(message);
+            throw new RuntimeException(message);
+        }
 
-    	String containerName = container.getContainerName();
+        String containerName = container.getContainerName();
 
-    	WebArchive archive = (WebArchive) new WildflyLRACoordinatorDeployment().create(extensionProperties.get(EXTENSION_DEPLOYMENT_NAME));
+        WebArchive archive = (WebArchive) new WildflyLRACoordinatorDeployment()
+                .create(extensionProperties.get(EXTENSION_DEPLOYMENT_NAME));
 
-    	DeploymentDescription deploymentDescription =
-            	new DeploymentDescription(extensionProperties.get(EXTENSION_DEPLOYMENT_NAME), archive)
-                    	.setTarget(new TargetDescription(containerName));
-    	deploymentDescription.shouldBeTestable(Boolean.parseBoolean(extensionProperties.get(EXTENSION_TESTABLE)));
-    	// Auto-define if the deployment should be managed or unmanaged
-    	deploymentDescription.shouldBeManaged(!container.getMode().equals("manual"));
+        DeploymentDescription deploymentDescription =
+                new DeploymentDescription(extensionProperties.get(EXTENSION_DEPLOYMENT_NAME), archive)
+                        .setTarget(new TargetDescription(containerName));
+        deploymentDescription.shouldBeTestable(Boolean.parseBoolean(extensionProperties
+                .get(EXTENSION_TESTABLE)));
+        // Auto-define if the deployment should be managed or unmanaged
+        deploymentDescription.shouldBeManaged(!container.getMode().equals("manual"));
 
-    	descriptions.add(deploymentDescription);
+        descriptions.add(deploymentDescription);
 
-    	return descriptions;
-	}
+        return descriptions;
+    }
 }
 ```
 
