@@ -2,6 +2,7 @@
 title = 'Narayana on the Cloud'
 date = 2022-04-21
 draft = false
+coverCaption = "Photo by Pixaba"
 +++
 
 In the last few months, I have been working on how distributed transactions are recovered in WildFly when this Application Server (AS) is deployed in Kubernetes. This blog post is a reflection on how Narayana performs on the cloud and the features it is still missing for it to evolve into a native cloud transaction suite.

@@ -2,6 +2,7 @@
 title = 'Arquillian: Scenario Generator'
 date = 2021-09-02
 draft = false
+coverCaption = 'Photo by Darya Grey_Owl'
 +++
 
 Arquillian is a powerful testing framework for Java that allows developers to test their code against Java containers. In other words, Arquillian is able to package an ad-hoc archive and deploy it into a specified Java container. As a consequence, integration tests become much easier to set up and handle. Moreover, Arquillian is also integrated with famous testing frameworks, i.e. JUnit and TestNG, which allows developers to run integration tests with usual building tools like Maven and Ant. For more information about Arquillian and its powerful features, please visit the project’s homepage [1] or refer to the introductory book of John D. Ament [2].
