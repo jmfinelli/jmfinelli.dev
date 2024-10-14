@@ -12,12 +12,12 @@
 
 [[main]]
   name = "Posts"
-  pageRef = "posts"
+  pageRef = "/posts"
   weight = 10
 
 [[main]]
   name = "About Me"
-  pageRef = "about"
+  pageRef = "/about"
   weight = 20
 
 [[main]]
@@ -39,3 +39,21 @@
 #   name = "Tags"
 #   pageRef = "tags"
 #   weight = 10
+
+[[footer]]
+  name = "GitHub"
+  url = "https://github.com/jmfinelli"
+  weight = 10
+  [footer.params]
+    icon = "github"
+    showName = true
+    target = "_blank"
+
+[[footer]]
+  name = "Twitter/X"
+  url = "https://x.com/jmfinelli"
+  weight = 20
+  [footer.params]
+    icon = "x-twitter"
+    showName = true
+    target = "_blank"
