@@ -1,0 +1,15 @@
+.image-crop {
+    width: 100%;
+    aspect-ratio: 3 / 1;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-crop img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
+}
